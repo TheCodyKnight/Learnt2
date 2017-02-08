@@ -1,0 +1,2 @@
+-event: priority (e.g. 4000) to set priority for event
+-z-index for DOM elements to set visibility-/click-priority
