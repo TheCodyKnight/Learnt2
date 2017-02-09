@@ -1,0 +1,167 @@
+
+// function in install to create attributes for respective table
+    private function createDatabase()
+     {
+         /** @var Shopware\Bundle\AttributeBundle\Service\CrudService $service */
+         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+         $service->update(
+             's_x_attributes',
+             'column_name',
+             'text',
+             array(
+                 'displayInBackend' => false,
+                 'position' => 100,
+             )
+         );
+    }
+
+//function in uninstall to remove created attributes
+    private function removeDatabase()
+     {
+         /** @var Shopware\Bundle\AttributeBundle\Service\CrudService $service */
+         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+         $service->delete(
+             's_x_attributes',
+             'column_name'
+         );
+    }
+
+// function in install to create events / hooks
+//hooks are created either with before or after attributes
+//priority value can be added as third parameter
+//ALL events can be found in the chrome dev tools in the network tab when emitted
+private function createEvents()
+     {
+         $this->subscribeEvent(
+             'sOrder::nameOfEvent::after',
+             'afterNameOfEvent',
+             2000);
+ 
+         $this->subscribeEvent(
+             'Enlight_Controller_Action_PostDispatchSecure_Backend',
+             'onBackendPostDispatchSecure'
+         ); 
+    }
+
+public function onBackendPostDispatchSecure(Enlight_Controller_ActionEventArgs $args) 
+{
+	$request = $args->getRequest();
+	$action = $request->getActionName();
+
+//event actions always come with a request, so it may be a good idea to
+//read out those params for additional info
+	$param = $request->getParam('paramName');
+	$params = $request->getParams();
+	
+
+//typical switch case for different operations depending on action
+
+	switch ($action) 
+	{
+		case ("fireEvent1"): 
+		break;
+
+		case ("fireEvent2"):
+		break;
+	{
+
+}
+
+
+//functions are private when they are only used within (public) functions in the Bootstrap
+//this is how frontend/backend templates are registered
+private function registerMyTemplateDir(Enlight_View_Default $view) 
+{
+	$dir = __DIR__ . '/Views/';
+		
+	$view->Engine->addTemplateDir(
+		$dir, 
+		'plugin_name',
+		Enlight_Template_Manager::POSITION_PREPEND
+	);
+	
+} 
+
+//don't forget to do the actual uninstall here ;) with return parent::uninstall();
+    public  function uninstall()
+     {
+         $this->removeDatabase();
+         return parent::uninstall();
+ 
+    }
+
+
+//extjs uses smarty block system, so extending works likewise
+//but how does it know what to do with the 'fields' ?
+
+ //{extends 'parent:backend/x/model/x.js'}
+ 
+ fields = [
+ // *********************************************************************************************************************
+ //{block name="backend/x/model/x.js" append}
+     { name: 'newField', type: 'string', useNull: true },
+ //{/block}
+ // *********************************************************************************************************************
+
+
+
+//config.php in shopware:
+<?php
+return array(
+    'db' => array(
+        'username' => 'root',
+        'password' => 'linux1',
+        'dbname' => 'shopware_528',
+        'host' => 'localhost',
+        'port' => '3306'
+    ),
+
+    'front'     => [
+        'throwExceptions' => true,
+    ],
+
+//     Template-Cache
+    'template'  => [
+        'forceCompile' => true,
+    ],
+
+    // Http-Cache
+    'httpCache' => [
+        'enabled' => false, // true or false
+        'debug'   => true,
+    ],
+
+    'mail'      => [
+        'type' => 'file',
+        'path' => $this->DocPath() . 'mails',
+    ],
+
+    'snippet'      => [
+        'readFromDb'             => true,
+        'writeToDb'              => false,
+        'readFromIni'            => true,
+        'writeToIni'             => true,
+        'showSnippetPlaceholder' => true,
+    ],
+
+    'errorHandler' => [
+        'throwOnRecoverableError' => false,
+    ],
+
+    'model' => array('cacheProvider' => 'Array'),
+
+
+    'cache' => array(
+        'backend' => 'Black-Hole',
+        'backendOptions' => array(),
+        'frontendOptions' => array(
+            'write_control' => false
+        )
+    ),
+    'phpsettings' => [
+        'display_errors' => 1,
+    ]
+
+
+);
+
