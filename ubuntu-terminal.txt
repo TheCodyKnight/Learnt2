@@ -1,0 +1,12 @@
+keys:
+
+ctrl+r = search in input commands from session
+
+
+commands:
+
+tail -f -n 20 /var/log/apache2/error.log | sed 's/\\n/\n/g'
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+sudo chmod -R 777 //var/www/html/52
